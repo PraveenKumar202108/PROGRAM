@@ -1,2 +1,59 @@
-# PROGRAM
-Write a C++ program that uses stack operation to convert a given infix expression into into its  postfix equivalent.
+#include <bits/stdc++.h>
+using namespace std;
+int presedence(char c){
+       if(c=='^'){
+           return 3;
+       }
+       if(c=='*' || c=='/'){
+           return 2;
+       }
+       if(c=='+' || c== '-'){
+           return 1;
+       }
+       else
+          return -1;
+   }
+   string infixtopostfix(string s)
+   {
+
+       stack<char>st;
+       string res="";
+       for(int i =0 ; i< s.size() ; i++){
+           if(s[i]=='('){
+
+               st.push(s[i]);
+
+           }
+           else if(s[i]>='A'&&s[i]<='Z' || s[i]>='a' && s[i]<='z'){
+               res +=s[i];
+           }
+          else if(s[i]==')'){
+               while(!st.empty() && st.top() != '('){
+                   res += st.top();
+                   st.pop();
+               }
+              if(!st.empty())
+               st.pop();
+           }
+           else {
+
+               while(!st.empty() && presedence(st.top())>=presedence(s[i])){
+                  res += st.top();
+                  st.pop();
+                }
+                st.push(s[i]);
+              }
+           }
+           while(!st.empty()){
+               res += st.top();
+               st.pop();
+           }
+           return res;
+   }
+int main() {
+	string s;
+	cout<<" Enter an infix expression";
+	cin>>s;
+	cout<<infixtopostfix(s);
+	return 0;
+}
